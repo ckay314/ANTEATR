@@ -57,24 +57,8 @@ def rotz(vec, ang):
 	return [xout, yout, vec[2]]
 
 # -------------- main function ------------------
-'''try:
-    Elat      = float(sys.argv[1])
-    Elon0     = float(sys.argv[2])
-    CMElat    = float(sys.argv[3])
-    CMElon    = float(sys.argv[4])
-    CMEtilt   = float(sys.argv[5])  # forecat tilt, wrt to N not E
-    CMEvel0   = float(sys.argv[6]) * 1e5    # convert to cm/s
-    CMEmass   = float(sys.argv[7]) * 1e15   # convert to g
-    CMEAW     = float(sys.argv[8]) * dtor  # convert to radians
-    CMEA      = float(sys.argv[9])
-    CMEB      = float(sys.argv[10])
-    vSW       = float(sys.argv[11]) * 1e5   # convert to cm/s
-    SWrho0    = float(sys.argv[12]) * 1.67e-24 # in g (just missing expo factor before) 
-    Cd        = float(sys.argv[13])
-except:
-    sys.exit('only '+str(len(sys.argv)-1)+' inputs given, need 14 (Elat Elon0 tGCS t20 CMEv CMEM CMEAW CMEA CMEB vSW SWrho0 )')
 
-invec = [Elat, Elon0, CMElat, CMElon, CMEtilt, CMEvel0, CMEmass, CMEAW, CMEA, CMEB, vSW, SWrho0, Cd]'''
+#invec = [Elat, Elon0, CMElat, CMElon, CMEtilt, CMEvel0, CMEmass, CMEAW, CMEA, CMEB, vSW, SWrho0, Cd]
 def getAT(invec, rCME):
     
     Elat      = invec[0]
@@ -160,7 +144,6 @@ def getAT(invec, rCME):
         else:
             return 9999, -9999
 
+# example runs
 #invec = [-2.7,0.,-15.,-45.,35.,800.,1., 80., 0.8, 0.7, 375, 3, 0.8]               
 #print getAT(invec, 21.5)
-#invec = [0,0.,0.,0.,90.,1200.,5./2, 40., 0.75, 0.35, 440., 6.9, 0.5]               
-#print getAT(invec, 20.)

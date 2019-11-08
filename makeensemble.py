@@ -4,9 +4,6 @@ from funcANTEATR import getAT
 getv = lambda x: 660*np.log10(x)-9475.
 getAW = lambda x: 19.8*np.log10(x) - 270.
     
-#masses = np.array([0.5,0.6,0.7,0.8,0.9,1.,2.,3.,4.,5.,6.,7.,8.,9.,10.,20.,30.,40.,50.])*1e15
-
-#logmasses = np.linspace(14.7, 16.7, 30, endpoint=True)
 logmasses = np.linspace(15, 16.7, 30, endpoint=True)
 masses =  np.power(10, logmasses)
 
