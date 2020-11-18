@@ -1,27 +1,48 @@
-# ANTEATR
-This repo contains two files- funcANTEATR.py and makeensemble.py.  funcANTEATR is the basic ANTEATR code in a function form that can be called by the ensemble script.  makeensemble sets up the ensembles and runs ANTEATR.  The simulation is run as "python makeensemble.py"
+# ANTEATR-PARADE
+This repo contains the most recent version of ANTEATR. ANTEATR-PARADE simulates the expansion and deformation of both the CME axis and cross section as the result of magnetic and drag forces. The main component is the function 'getAT' that is designed to be called by external functions. If PARADE.py is executed via 'python PARADE.py' then it will run the example at the very bottom of the code.
 
-## funcANTEATR
-This file contains the function getAT, which take an input array of simulation properties and separately the initial radius of the CME (in solar radii).  The input vector should contain in order (with units in []):
-1. Earth latitude at the start of the simulation [deg]
-2. Earth longitude at the start of the simulation [deg]
-3. CME latitude [deg]
-4. CME longitude [deg]
-5. CME radial velocity [km/s]
-6. CME mass [1e15 g]
-7. CME angular width [deg]
-8. CME shape ratio A [unitless]
-9. CME shape ratio B [unitless]
-10. Solar wind velocity at L1 [km/s]
-11. Solar wind number density at L1 [cm^-3]
+## Inputs
+ANTEATR-PARADE requires two input vectors to run. The first contains all the parameters related to the CME and the background solar wind (referred to as invec in the code) and the second contains the satellite parameters (referred to as satParams).
 
-The time of impact is actually calculated for a radial distance corresponding to L1 (213 solar radii).  This can be switched to 1 AU by changing the 213s to 215s if desired.  
+The first input vector, invec, should contain in order (with units in []):
+1. CME latitude [deg]
+2. CME longitude [deg]
+3. CME orientation [deg] 
+4. CME radial velocity [km/s]
+5. CME mass [1e15 g]
+5. CME full angular width [deg]
+7. CME cross section angular width [deg]
+8. CME shape ratio delta_Ax [unitless]
+9. CME shape ratio delta_CS [unitless]
+10. CME shape ratio delta_CA [unitless]
+11. CME front initial radial distance [Rs]
+12. Ratio of CME B to SW B
+13. Solar wind number density at L1 [cm^-3]
+14. Solar wind velocity at L1 [km/s]
+15. Solar wind magnetic field at L1 [nT]
+16. Solar wind drag coefficient [unitless]
+17. Flux rope tau parameter
+18. Flux rope C parameter
 
-The first while loop moves the CME from the starting distance to 213, while including the effects of 1D drag on the CME velocity.  After it reaches 213 solar radial, the second while loop continues to propagate it forward, but begins checking to see if the synthetic satellite/Earth is within the volume of the CME.  Once impact occurs it returns the travel time and the current radial CME velocity.  
+The second input vector, satParmas, should contain:
+1. Satellite latitude [deg]
+2. Satellite longitude [deg]
+3. Satellite distance [Rs]
+4. Satellite orbital speed [deg/sec]
 
-The distance from the CME's toroidal axis is calculated in the second while look.  As the CME approaches impact this will decrease.  If no impact occurs then it should begin increasing before it reaches a distance less than the cross-sectional width.  When the distance increases we stop the simulation and return a transit time and speed of 9999 and -9999 to signify no impact.
+## Outputs
+ANTEATR-PARADE returns four outputs - called outs, Elon, vs, and estDur in the example. Elon is the longitude of the satellite at the time of impact, which will not be the same as the initial value if it has an orbit and is useful for any models following ANTEATR-PARADE that calculate in situ properties. vs is an array with the individual components of the velocity at the time of impact ([vFront, vEdge, vBulk, vCSrad, vCSperp, vAxrad, vAxperp]). estDur is an estimate of the duration including the continued effects of expansion.
 
-Line 82 currently sets there to be no rotation/orbit of the Earth.  For real predictions this should be commented out as the orbit is important for precise predictions, but we do not include it in the ensemble study to focus on the effects from the variation in other parameters.
+outs is a large array containing time profiles of different parameters, which can be used to generate figures. outs[i] is an array of a given output where i corresponds to:
+0: Time [days]
+1: CME nose distance [Rs]
+2: Velocities [km/s] - this is an array of one vector for each time step with the order as listed above
+3: CME full angular width [deg]
+4: CME cross section angular width [deg]
+5: CME shape ratio delta_Ax [unitless]
+6: CME shape ratio delta_CS [unitless]
+7: CME shape ratio delta_CA [unitless]
+8: CME magnetic field strength [G]
+9: Flux rope C parameter
 
-## makeensemble
-This is just a wrapper script for repeatedly calling funcANTEATR to generate the ensembles used in the Kay, Mays, and Verbeke (2019) paper.  The two lambda functions at the top scale the CME velocity and angular width based on the mass.  We define the control input vector then loop through different scale (mass) CMEs and vary each input parameter one at a time.  The results are just printed to a screen because I got lazy and just use "python makeensemble.py > output.dat" rather than actually printing to file within the code. 
+Note that the magnetic field strength corresponds to the parameter B_0 used in our magnetic field model, which then can be used to calculate the toroidal and poloidal field strengths given delta_CS, C, and tau.
