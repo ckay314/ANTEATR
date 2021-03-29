@@ -10,19 +10,20 @@ The first input vector, invec, should contain in order (with units in []):
 3. CME orientation [deg] 
 4. CME radial velocity [km/s]
 5. CME mass [1e15 g]
-5. CME full angular width [deg]
+6. CME full angular width [deg]
 7. CME cross section angular width [deg]
 8. CME shape ratio delta_Ax [unitless]
 9. CME shape ratio delta_CS [unitless]
-10. CME shape ratio delta_CA [unitless]
-11. CME front initial radial distance [Rs]
-12. Ratio of CME B to SW B
-13. Solar wind number density at L1 [cm^-3]
-14. Solar wind velocity at L1 [km/s]
-15. Solar wind magnetic field at L1 [nT]
-16. Solar wind drag coefficient [unitless]
-17. Flux rope tau parameter
-18. Flux rope C parameter
+10. CME front initial radial distance [Rs]
+11. Ratio of CME B to SW B
+12. Solar wind number density at L1 [cm^-3]
+13. Solar wind velocity at L1 [km/s]
+14. Solar wind magnetic field at L1 [nT]
+15. Solar wind drag coefficient [unitless]
+16. Flux rope tau parameter
+17. Flux rope C parameter
+18. Ratio of CME T to SW T
+19. Adiabatic index
 
 The second input vector, satParmas, should contain:
 1. Satellite latitude [deg]
@@ -46,5 +47,6 @@ outs is a large array containing time profiles of different parameters, which ca
 7: CME shape ratio delta_CA [unitless]
 8: CME magnetic field strength [G]
 9: Flux rope C parameter
+10: Log10 of CME temperature in K [unitless]
 
 Note that the magnetic field strength corresponds to the parameter B0 used in our magnetic field model, which then can be used to calculate the toroidal and poloidal field strengths given deltaCS, C, and tau.
